@@ -8,10 +8,10 @@ current_login_user = None
 
 
 class Account:
-  def __init__(self, name, password, borrowed_books=[]):
+  def __init__(self, name, password):
     self.name = name
     self.password = password
-    self.borrowed_books = borrowed_books
+    self.borrowed_books = []
   def __str__(self):
     return f"{self.name:^26}"
   ...
@@ -137,6 +137,14 @@ def remove_book():
   ...
 
 def display_all_borrowed_books():
+  print(f"{" Borrowed Books by users ":-^71}")
+  print(f" {"Title":^24} | {"Author":^24} | {"ISBN":^4} | {"Quantity":^8} | {"Borrowed by":^11} ")
+  print("-" * 71)
+  for acc in accounts_record:
+    for book in acc.borrowed_books:
+      print(book, end=f"| {acc.name}")
+      print()
+  print("-" * 71)
   ...
 
 def display_all_account():
@@ -385,7 +393,8 @@ def admin_menu():
     print("[3] Search book")
     print("[4] Display all books")
     print("[5] Display all account")
-    print("[6] Logout")
+    print("[6] Display all borrowed books")
+    print("[7] Logout")
     
     match input("Input: "):
       case "0":
@@ -401,6 +410,8 @@ def admin_menu():
       case "5":
         display_all_account()
       case "6":
+        display_all_borrowed_books()
+      case "7":
         current_login_user = None
         print("Logout...")
         return
