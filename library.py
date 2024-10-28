@@ -22,7 +22,8 @@ class Book:
   # author
 
 
-# Transaction operations
+def add_default():
+  ...
 
 # admin operations
 def add_book():
