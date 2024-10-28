@@ -136,6 +136,9 @@ def remove_book():
     print(f"A book with '{isbn}' was not found")
   ...
 
+def display_all_borrowed_books():
+  ...
+
 def display_all_account():
   print(f"{" Registered Accounts ":-^71}")
   print(f"{"Name":^26}")
