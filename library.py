@@ -1,5 +1,3 @@
-import random
-
 # Records
 books_record = []
 accounts_record = []
