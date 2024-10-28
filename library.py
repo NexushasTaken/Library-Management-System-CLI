@@ -7,7 +7,6 @@ accounts_record = []
 current_login_user = -1
 
 
-# Structure infos (eg. Book, Account)
 class Account:
   ...
   # name
