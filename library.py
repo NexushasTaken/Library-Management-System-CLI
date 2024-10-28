@@ -57,10 +57,6 @@ def login():
 def register():
   ...
 
-def logout():
-  ...
-
-# login/register/logout menu
 def main_menu():
   ...
 
