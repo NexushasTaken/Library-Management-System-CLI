@@ -14,7 +14,8 @@ class Account:
   # password
   # borrowed books
 
-class Book:...
+class Book:
+  ...
   # isbn
   # quantity
   # title
