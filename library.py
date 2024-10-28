@@ -34,6 +34,9 @@ def edit_book():
 def remove_book():
   ...
 
+def display_all_borrowed_books():
+  ...
+
 def display_all_account():
   ...
 
