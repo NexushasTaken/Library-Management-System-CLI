@@ -44,6 +44,9 @@ def search_book():
 def borrow_book():
   ...
 
+def return_book():
+  ...
+
 def display_my_borrowed_books():
   ...
 
