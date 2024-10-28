@@ -133,7 +133,7 @@ def remove_book():
           print(f"{quantity} books has been removed!")
           return
 
-      print(f"A book with '{isbn}' was not found")
+    print(f"A book with '{isbn}' was not found")
   ...
 
 def display_all_account():
@@ -169,6 +169,7 @@ def search_book():
         print(book)
         continue
     print("-" * 71)
+    break
   ...
 
 def borrow_book():
@@ -214,7 +215,6 @@ def return_book():
   print("Press Enter without typing anything to return to the menu.")
 
   while True:
-    print("Enter 'exit' to go back to menu")
     input_isbn = input("Enter ISBN: ")
     if len(input_isbn) == 0: return
 
@@ -249,7 +249,7 @@ def display_my_borrowed_books():
     print("You don't have any borrowed books!")
     return
 
-  print(f"{"Borrowed books":-^71}")
+  print(f"{" Borrowed books ":-^71}")
   print(f" {"Title":^24} | {"Author":^24} | {"ISBN":^4} | {"Quantity":^8} ")
   print("-" * 71)
   for book in current_login_user.borrowed_books:
@@ -258,7 +258,7 @@ def display_my_borrowed_books():
   ...
 
 def display_all_books():
-  print(f"{"Available books":-^71}")
+  print(f"{" Available books ":-^71}")
   print(f" {"Title":^24} | {"Author":^24} | {"ISBN":^4} | {"Quantity":^8} ")
   print("-" * 71)
   for book in books_record:
@@ -345,7 +345,7 @@ def user_menu():
 
   while True:
     print(f"{f" Login as {current_login_user.name} ":-^71}")
-    print("[0] Search")
+    print("[0] Search book")
     print("[1] Borrow book")
     print("[2] Return book")
     print("[3] Display my borrowed books")
