@@ -4,7 +4,7 @@ import random
 books_record = []
 accounts_record = []
 
-current_login_user = -1
+current_login_user = None
 
 
 class Account:
