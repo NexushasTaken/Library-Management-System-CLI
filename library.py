@@ -47,12 +47,12 @@ def display_all_books():
 # universal operations
 def login():
   ...
-def signin():
+def register():
   ...
 def logout():
   ...
 
-# login/signin/logout menu
+# login/register/logout menu
 def main_menu():
   ...
 def user_menu():
