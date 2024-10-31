@@ -210,7 +210,7 @@ def borrow_book():
         current_login_user.borrowed_books.append(Book(book.title, book.author, book.isbn, 1))
         print("Sucessfully borrowed")
         return
-    print(f"ISBN {isbn} not found!")
+    print(f"A book with '{isbn}' was not found")
   ...
 
 def return_book():
@@ -251,7 +251,7 @@ def return_book():
 
         print("Sucessfully returned")
         return
-    print(f"ISBN {isbn} not found!")
+    print(f"A book with '{isbn}' was not found")
   ...
 
 def display_my_borrowed_books():
