@@ -13,9 +13,6 @@ class Account:
   def __str__(self):
     return f"{self.name:^26}"
   ...
-  # name
-  # password
-  # borrowed books
 
 class Book:
   def __init__(self, title, author, isbn, quantity):
@@ -26,10 +23,6 @@ class Book:
   def __str__(self):
     return f" {self.title:^24} | {self.author:^24} | {self.isbn:^4} | {self.quantity:^8} "
   ...
-  # isbn
-  # quantity
-  # title
-  # author
 
 
 def add_default():
@@ -54,7 +47,7 @@ def add_book():
   global books_record
 
   print(f"{" Adding a new book ":-^71}")
-  print("Press Enter without typing anything to return to the menu.")
+  print("Leave empty and press Enter to return to the menu.")
 
   while True:
     title  = input("Enter title : ")
@@ -65,7 +58,7 @@ def add_book():
 
     quantity = input("Enter quantity: ")
     if len(quantity) == 0: return
-    
+
     # find the isbn that was not in used
     isbn = 0
     for book in books_record:
@@ -83,17 +76,22 @@ def edit_book():
   global books_record
 
   print(f"{" Editing the book title and author ":-^71}")
-  print("Press Enter without typing anything to return to the menu.")
+  print("Leave empty and press Enter to return to the menu.")
 
   while True:
     input_isbn = input("Enter ISBN: ")
     if len(input_isbn) == 0: return
+    if not input_isbn.isdigit():
+      print(f"ISBN must contain only digits.")
+      continue
 
     isbn = int(input_isbn)
     for book in books_record:
       if isbn == book.isbn:
+        print("Leave empty to keep current info unchanged.")
         title  = input("Enter title : ")
         author = input("Enter author: ")
+
         book.title = title or book.title
         book.author = author or book.author
         print("Book info has been updated!")
@@ -104,16 +102,17 @@ def remove_book():
   global books_record
 
   print(f"{" Removing a book ":-^71}")
-  print("Press Enter without typing anything to return to the menu.")
+  print("Leave empty and press Enter to return to the menu.")
 
   while True:
     input_isbn = input("Enter ISBN: ")
     if len(input_isbn) == 0: return
+    if not input_isbn.isdigit():
+      print(f"ISBN must contain only digits.")
+      continue
 
     isbn = int(input_isbn)
-    for i in range(len(books_record)):
-      book = books_record[i]
-
+    for book in books_record:
       if isbn == book.isbn:
         while True:
           input_quantity = input(f"Enter Quantity(1-{book.quantity}): ")
@@ -123,10 +122,10 @@ def remove_book():
           if quantity < 1 or quantity > book.quantity:
             print(f"Please enter a number in between 1 and {book.quantity}")
             continue
-          
+
           book.quantity -= quantity
           if book.quantity == 0:
-            del books_record[i]
+            books_record.remove(book)
 
           print(f"{quantity} books has been removed!")
           return
@@ -135,14 +134,14 @@ def remove_book():
   ...
 
 def display_all_borrowed_books():
-  print(f"{" Borrowed Books by users ":-^71}")
+  print(f"{" Borrowed Books by users ":-^85}")
   print(f" {"Title":^24} | {"Author":^24} | {"ISBN":^4} | {"Quantity":^8} | {"Borrowed by":^11} ")
-  print("-" * 71)
+  print("-" * 85)
   for acc in accounts_record:
     for book in acc.borrowed_books:
-      print(book, end=f"| {acc.name}")
+      print(book, end=f"| {acc.name:^11}")
       print()
-  print("-" * 71)
+  print("-" * 85)
   ...
 
 def display_all_account():
@@ -154,10 +153,10 @@ def display_all_account():
   print("-" * 26)
   ...
 
-# regular user / admin operations 
+# regular user / admin operations
 def search_book():
   print(f"{" Book searching ":-^71}")
-  print("Press Enter without typing anything to return to the menu.")
+  print("Leave empty and press Enter to return to the menu.")
 
   while True:
     print("Search by title, author, ISBN, or quantity.")
@@ -185,11 +184,14 @@ def borrow_book():
   global books_record
 
   print(f"{" Borrowing a book ":-^71}")
-  print("Press Enter without typing anything to return to the menu.")
+  print("Leave empty and press Enter to return to the menu.")
 
   while True:
     input_isbn = input("Enter ISBN: ")
     if len(input_isbn) == 0: return
+    if not input_isbn.isdigit():
+      print(f"ISBN must contain only digits.")
+      continue
 
     isbn = int(input_isbn)
 
@@ -199,13 +201,11 @@ def borrow_book():
         print("You already borrowed this book!")
         return
 
-    for i in range(len(books_record)):
-      book = books_record[i]
-
+    for book in books_record:
       if isbn == book.isbn:
         book.quantity -= 1
         if book.quantity == 0:
-          del books_record[i]
+          books_record.remove(book)
 
         current_login_user.borrowed_books.append(Book(book.title, book.author, book.isbn, 1))
         print("Sucessfully borrowed")
@@ -221,17 +221,18 @@ def return_book():
     return
 
   print(f"{" Returning a book ":-^71}")
-  print("Press Enter without typing anything to return to the menu.")
+  print("Leave empty and press Enter to return to the menu.")
 
   while True:
     input_isbn = input("Enter ISBN: ")
     if len(input_isbn) == 0: return
+    if not input_isbn.isdigit():
+      print(f"ISBN must contain only digits.")
+      continue
 
     isbn = int(input_isbn)
 
-    for i in range(len(current_login_user.borrowed_books)):
-      borrowed_book = current_login_user.borrowed_books[i]
-
+    for borrowed_book in current_login_user.borrowed_books:
       if isbn == borrowed_book.isbn:
         entry = None
 
@@ -246,7 +247,7 @@ def return_book():
 
         # Assuming each book's quantity is set to one, since a user can only
         # borrow the same book once.
-        del current_login_user.borrowed_books[i]
+        current_login_user.borrowed_books.remove(borrowed_book)
 
         print("Sucessfully returned")
         return
@@ -280,7 +281,7 @@ def login():
   global current_login_user
 
   print(f"{" Login ":-^71}")
-  print("Press Enter without typing anything to return to the menu.")
+  print("Leave empty and press Enter to return to the menu.")
 
   while True:
     username = input("Enter username: ")
@@ -312,7 +313,7 @@ def register():
   global accounts_record
 
   print(f"{" Register ":-^71}")
-  print("Press Enter without typing anything to return to the menu.")
+  print("Leave empty and press Enter to return to the menu.")
 
   while True:
     username = input("Enter username: ")
@@ -360,7 +361,7 @@ def user_menu():
     print("[3] Display my borrowed books")
     print("[4] Display all books")
     print("[5] Logout")
-    
+
     match input("Input: "):
       case "0":
         search_book()
@@ -393,7 +394,7 @@ def admin_menu():
     print("[5] Display all account")
     print("[6] Display all borrowed books")
     print("[7] Logout")
-    
+
     match input("Input: "):
       case "0":
         add_book()
