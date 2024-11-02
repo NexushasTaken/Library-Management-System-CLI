@@ -34,9 +34,9 @@ def add_default_records():
   accounts_record.append(Account("admin", "admin"))
   accounts_record.append(Account("isip", "isip"))
   accounts_record.append(Account("aton", "aton"))
-  accounts_record.append(Account("geraldyn", "geraldyn"))
   accounts_record.append(Account("cortez", "cortez"))
   accounts_record.append(Account("javier", "javier"))
+  accounts_record.append(Account("geraldyn", "geraldyn"))
 
 
 # Book operations
