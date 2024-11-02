@@ -24,10 +24,7 @@ class Book:
     return f" {self.title:^24} | {self.author:^24} | {self.isbn:^4} | {self.quantity:^8} "
 
 
-
-def add_default():
-  global books_record, accounts_record
-
+def add_default_records():
   # default books
   books_record.append(Book("Physics", "Isaac Newton", 0, 1))
   books_record.append(Book("Math", "3B1B", 1, 2))
@@ -44,9 +41,7 @@ def add_default():
 
 # Book operations
 def add_book():
-  global books_record
-
-  print(f"{" Adding a new book ":-^71}")
+  print(f"\n{" Adding a new book ":-^71}")
   print("Leave empty and press Enter to return to the Dashboard.")
 
   while True:
@@ -73,9 +68,7 @@ def add_book():
     break
 
 def edit_book():
-  global books_record
-
-  print(f"{" Editing the book title and author ":-^71}")
+  print(f"\n{" Editing the book title and author ":-^71}")
   print("Leave empty and press Enter to return to the Dashboard.")
 
   while True:
@@ -99,9 +92,7 @@ def edit_book():
 
 
 def remove_book():
-  global books_record
-
-  print(f"{" Removing a book ":-^71}")
+  print(f"\n{" Removing a book ":-^71}")
   print("Leave empty and press Enter to return to the Dashboard.")
 
   while True:
@@ -134,7 +125,7 @@ def remove_book():
 
 
 def search_book():
-  print(f"{" Book searching ":-^71}")
+  print(f"\n{" Book searching ":-^71}")
   print("Leave empty and press Enter to return to the Dashboard.")
 
   while True:
@@ -160,9 +151,7 @@ def search_book():
 
 
 def borrow_book():
-  global books_record
-
-  print(f"{" Borrowing a book ":-^71}")
+  print(f"\n{" Borrowing a book ":-^71}")
   print("Leave empty and press Enter to return to the Dashboard.")
 
   while True:
@@ -193,13 +182,11 @@ def borrow_book():
 
 
 def return_book():
-  global books_record
-
   if len(current_login_user.borrowed_books) == 0:
     print("You don't have any borrowed books!")
     return
 
-  print(f"{" Returning a book ":-^71}")
+  print(f"\n{" Returning a book ":-^71}")
   print("Leave empty and press Enter to return to the Dashboard.")
 
   while True:
@@ -235,7 +222,7 @@ def return_book():
 
 # Display operations
 def display_all_books():
-  print(f"{" Available books ":-^71}")
+  print(f"\n{" Available books ":-^71}")
   print(f" {"Title":^24} | {"Author":^24} | {"ISBN":^4} | {"Quantity":^8} ")
   print("-" * 71)
   for book in books_record:
@@ -244,7 +231,7 @@ def display_all_books():
 
 
 def display_all_borrowed_books():
-  print(f"{" Borrowed Books by users ":-^85}")
+  print(f"\n{" Borrowed Books by users ":-^85}")
   print(f" {"Title":^24} | {"Author":^24} | {"ISBN":^4} | {"Quantity":^8} | {"Borrowed by":^11} ")
   print("-" * 85)
   for acc in accounts_record:
@@ -259,7 +246,7 @@ def display_my_borrowed_books():
     print("You don't have any borrowed books!")
     return
 
-  print(f"{" Borrowed books ":-^71}")
+  print(f"\n{" Borrowed books ":-^71}")
   print(f" {"Title":^24} | {"Author":^24} | {"ISBN":^4} | {"Quantity":^8} ")
   print("-" * 71)
   for book in current_login_user.borrowed_books:
@@ -268,7 +255,7 @@ def display_my_borrowed_books():
 
 
 def display_all_account():
-  print(f"{" Registered Accounts ":-^71}")
+  print(f"\n{" Registered Accounts ":-^71}")
   print(f"{"Name":^26}")
   print("-" * 26)
   for acc in accounts_record:
@@ -280,7 +267,7 @@ def display_all_account():
 def login():
   global current_login_user
 
-  print(f"{" Login ":-^71}")
+  print(f"\n{" Login ":-^71}")
   print("Leave empty and press Enter to return to the Main Menu.")
 
   while True:
@@ -310,9 +297,7 @@ def login():
 
 
 def register():
-  global accounts_record
-
-  print(f"{" Register ":-^71}")
+  print(f"\n{" Register ":-^71}")
   print("Leave empty and press Enter to return to the Main Menu.")
 
   while True:
@@ -334,7 +319,7 @@ def register():
 
 # Menus
 def main_menu():
-  print(f"{" Main Menu ":-^71}")
+  print(f"\n{" Main Menu ":-^71}")
   print("[0] Login")
   print("[1] Register")
   print("[2] Exit")
@@ -355,7 +340,7 @@ def user_dashboard():
   global current_login_user
 
   while True:
-    print(f"{f" Login as {current_login_user.name} ":-^71}")
+    print(f"\n{f" Login as {current_login_user.name} ":-^71}")
     print("[0] Search book")
     print("[1] Borrow book")
     print("[2] Return book")
@@ -386,7 +371,7 @@ def admin_dashboard():
   global current_login_user
 
   while True:
-    print(f"{f" Admin Dashboard ":-^71}")
+    print(f"\n{f" Admin Dashboard ":-^71}")
     print("[0] Add book")
     print("[1] Edit book")
     print("[2] Remove book")
@@ -420,6 +405,7 @@ def admin_dashboard():
 
 
 # main entry
-add_default()
+add_default_records()
 while True:
   main_menu()
+
