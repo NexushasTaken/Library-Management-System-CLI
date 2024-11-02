@@ -12,7 +12,7 @@ class Account:
     self.borrowed_books = []
   def __str__(self):
     return f"{self.name:^26}"
-  ...
+
 
 class Book:
   def __init__(self, title, author, isbn, quantity):
@@ -22,7 +22,7 @@ class Book:
     self.quantity = quantity
   def __str__(self):
     return f" {self.title:^24} | {self.author:^24} | {self.isbn:^4} | {self.quantity:^8} "
-  ...
+
 
 
 def add_default():
@@ -40,7 +40,7 @@ def add_default():
   accounts_record.append(Account("geraldyn", "geraldyn"))
   accounts_record.append(Account("cortez", "cortez"))
   accounts_record.append(Account("javier", "javier"))
-  ...
+
 
 # Book operations
 def add_book():
@@ -96,7 +96,7 @@ def edit_book():
         book.author = author or book.author
         print("Book info has been updated!")
         return
-  ...
+
 
 def remove_book():
   global books_record
@@ -131,7 +131,7 @@ def remove_book():
           return
 
     print(f"A book with '{isbn}' was not found")
-  ...
+
 
 def search_book():
   print(f"{" Book searching ":-^71}")
@@ -157,7 +157,7 @@ def search_book():
         continue
     print("-" * 71)
     break
-  ...
+
 
 def borrow_book():
   global books_record
@@ -190,7 +190,7 @@ def borrow_book():
         print("Sucessfully borrowed")
         return
     print(f"A book with '{isbn}' was not found")
-  ...
+
 
 def return_book():
   global books_record
@@ -231,7 +231,7 @@ def return_book():
         print("Sucessfully returned")
         return
     print(f"A book with '{isbn}' was not found")
-  ...
+
 
 # Display operations
 def display_all_books():
@@ -241,7 +241,7 @@ def display_all_books():
   for book in books_record:
     print(book)
   print("-" * 71)
-  ...
+
 
 def display_all_borrowed_books():
   print(f"{" Borrowed Books by users ":-^85}")
@@ -252,7 +252,7 @@ def display_all_borrowed_books():
       print(book, end=f"| {acc.name:^11}")
       print()
   print("-" * 85)
-  ...
+
 
 def display_my_borrowed_books():
   if len(current_login_user.borrowed_books) == 0:
@@ -265,7 +265,7 @@ def display_my_borrowed_books():
   for book in current_login_user.borrowed_books:
     print(book)
   print("-" * 71)
-  ...
+
 
 def display_all_account():
   print(f"{" Registered Accounts ":-^71}")
@@ -274,7 +274,7 @@ def display_all_account():
   for acc in accounts_record:
     print(acc)
   print("-" * 26)
-  ...
+
 
 # User account management
 def login():
@@ -307,7 +307,7 @@ def login():
         return
       else:
         print("Invalid password!")
-  ...
+
 
 def register():
   global accounts_record
@@ -330,7 +330,7 @@ def register():
     accounts_record.append(Account(username, password))
     print("Account has been Registered!")
     break
-  ...
+
 
 # Menus
 def main_menu():
@@ -349,7 +349,7 @@ def main_menu():
       exit()
     case _:
       print("Invalid input!")
-  ...
+
 
 def user_dashboard():
   global current_login_user
@@ -380,7 +380,7 @@ def user_dashboard():
         return
       case _:
         print("Invalid input!")
-  ...
+
 
 def admin_dashboard():
   global current_login_user
@@ -417,7 +417,7 @@ def admin_dashboard():
         return
       case _:
         print("Invalid input!")
-  ...
+
 
 # main entry
 add_default()
