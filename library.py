@@ -33,7 +33,7 @@ def add_default():
   books_record.append(Book("Math", "3B1B", 1, 2))
   books_record.append(Book("Theory of relativity", "Albert Einstein", 2, 3))
 
-  # group members
+  # group members (account)
   accounts_record.append(Account("admin", "admin"))
   accounts_record.append(Account("isip", "isip"))
   accounts_record.append(Account("aton", "aton"))
