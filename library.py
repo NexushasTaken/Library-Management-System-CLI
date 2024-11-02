@@ -75,6 +75,7 @@ def add_book():
     print("New book has been added!")
     break
 
+
 def edit_book():
   print(f"\n{" Editing the book title and author ":-^71}")
   print("Leave empty and press Enter to return to the Dashboard.")
