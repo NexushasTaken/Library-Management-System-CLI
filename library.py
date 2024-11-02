@@ -273,7 +273,7 @@ def display_all_account():
   print("-" * 26)
 
 
-# User account management
+# User authentication
 def login():
   global logged_in_user
 
@@ -413,7 +413,7 @@ def admin_dashboard():
         print("Invalid input!")
 
 
-# main entry
+# Main entry
 while True:
   main_menu()
 
