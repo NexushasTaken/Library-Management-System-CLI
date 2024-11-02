@@ -283,7 +283,6 @@ def login():
     if len(username) == 0: return
 
     password = input("Enter password: ")
-    if len(username) == 0: return
 
     entry = None
     for acc in accounts_record:
