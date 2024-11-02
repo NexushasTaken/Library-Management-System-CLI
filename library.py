@@ -1,8 +1,3 @@
-# Records
-books_record = []
-accounts_record = []
-
-current_login_user = None
 
 
 class Account:
@@ -24,19 +19,22 @@ class Book:
     return f" {self.title:^24} | {self.author:^24} | {self.isbn:^4} | {self.quantity:^8} "
 
 
-def add_default_records():
-  # default books
-  books_record.append(Book("Physics", "Isaac Newton", 0, 1))
-  books_record.append(Book("Math", "3B1B", 1, 2))
-  books_record.append(Book("Theory of relativity", "Albert Einstein", 2, 3))
+# Global Variables
+library_books = [
+  Book("Physics", "Isaac Newton", 0, 1),
+  Book("Math", "3B1B", 1, 2),
+  Book("Theory of relativity", "Albert Einstein", 2, 3),
+]
+registered_users = [
+  Account("admin", "admin"),
+  Account("isip", "isip"),
+  Account("aton", "aton"),
+  Account("cortez", "cortez"),
+  Account("javier", "javier"),
+  Account("geraldyn", "geraldyn"),
+]
 
-  # group members (account)
-  accounts_record.append(Account("admin", "admin"))
-  accounts_record.append(Account("isip", "isip"))
-  accounts_record.append(Account("aton", "aton"))
-  accounts_record.append(Account("cortez", "cortez"))
-  accounts_record.append(Account("javier", "javier"))
-  accounts_record.append(Account("geraldyn", "geraldyn"))
+logged_in_user = None
 
 
 # Book operations
@@ -64,14 +62,14 @@ def add_book():
 
     # find the isbn that was not in used
     isbn = 0
-    for book in books_record:
+    for book in library_books:
       isbn = max(book.isbn, isbn)
-    for acc in accounts_record:
+    for acc in registered_users:
       for book in acc.borrowed_books:
         isbn = max(book.isbn, isbn)
     isbn += 1
 
-    books_record.append(Book(title, author, isbn, quantity))
+    library_books.append(Book(title, author, isbn, quantity))
     print("New book has been added!")
     break
 
@@ -88,7 +86,7 @@ def edit_book():
       continue
 
     isbn = int(input_isbn)
-    for book in books_record:
+    for book in library_books:
       if isbn == book.isbn:
         print("Leave empty to keep current info unchanged.")
         title  = input("Enter title : ")
@@ -112,7 +110,7 @@ def remove_book():
       continue
 
     isbn = int(input_isbn)
-    for book in books_record:
+    for book in library_books:
       if isbn == book.isbn:
         while True:
           input_quantity = input(f"Enter Quantity(1-{book.quantity}): ")
@@ -128,7 +126,7 @@ def remove_book():
 
           book.quantity -= quantity
           if book.quantity == 0:
-            books_record.remove(book)
+            library_books.remove(book)
 
           print(f"{quantity} books has been removed!")
           return
@@ -149,7 +147,7 @@ def search_book():
     print(f"{"Search results":-^71}")
     print(f" {"Title":^24} | {"Author":^24} | {"ISBN":^4} | {"Quantity":^8} ")
     print("-" * 71)
-    for book in books_record:
+    for book in library_books:
       if s.isdigit(): # it's either isbn or quantity
         n = int(s)
         if n == book.isbn or n == book.quantity:
@@ -176,25 +174,25 @@ def borrow_book():
     isbn = int(input_isbn)
 
     # A user can only borrow one copy of the same book.
-    for book in current_login_user.borrowed_books:
+    for book in logged_in_user.borrowed_books:
       if isbn == book.isbn:
         print("You already borrowed this book!")
         return
 
-    for book in books_record:
+    for book in library_books:
       if isbn == book.isbn:
         book.quantity -= 1
         if book.quantity == 0:
-          books_record.remove(book)
+          library_books.remove(book)
 
-        current_login_user.borrowed_books.append(Book(book.title, book.author, book.isbn, 1))
+        logged_in_user.borrowed_books.append(Book(book.title, book.author, book.isbn, 1))
         print("Sucessfully borrowed")
         return
     print(f"A book with '{isbn}' was not found")
 
 
 def return_book():
-  if len(current_login_user.borrowed_books) == 0:
+  if len(logged_in_user.borrowed_books) == 0:
     print("You don't have any borrowed books!")
     return
 
@@ -210,22 +208,22 @@ def return_book():
 
     isbn = int(input_isbn)
 
-    for borrowed_book in current_login_user.borrowed_books:
+    for borrowed_book in logged_in_user.borrowed_books:
       if isbn == borrowed_book.isbn:
         entry = None
 
-        for record in books_record:
+        for record in library_books:
           if isbn == record.isbn:
             entry = record
 
         if entry == None:
-          books_record.append(Book(borrowed_book.title, borrowed_book.author, borrowed_book.isbn, 1))
+          library_books.append(Book(borrowed_book.title, borrowed_book.author, borrowed_book.isbn, 1))
         else:
           entry.quantity += 1
 
         # Assuming each book's quantity is set to one, since a user can only
         # borrow the same book once.
-        current_login_user.borrowed_books.remove(borrowed_book)
+        logged_in_user.borrowed_books.remove(borrowed_book)
 
         print("Sucessfully returned")
         return
@@ -237,7 +235,7 @@ def display_all_books():
   print(f"\n{" Available books ":-^71}")
   print(f" {"Title":^24} | {"Author":^24} | {"ISBN":^4} | {"Quantity":^8} ")
   print("-" * 71)
-  for book in books_record:
+  for book in library_books:
     print(book)
   print("-" * 71)
 
@@ -246,7 +244,7 @@ def display_all_borrowed_books():
   print(f"\n{" Borrowed Books by users ":-^85}")
   print(f" {"Title":^24} | {"Author":^24} | {"ISBN":^4} | {"Quantity":^8} | {"Borrowed by":^11} ")
   print("-" * 85)
-  for acc in accounts_record:
+  for acc in registered_users:
     for book in acc.borrowed_books:
       print(book, end=f"| {acc.name:^11}")
       print()
@@ -254,14 +252,14 @@ def display_all_borrowed_books():
 
 
 def display_my_borrowed_books():
-  if len(current_login_user.borrowed_books) == 0:
+  if len(logged_in_user.borrowed_books) == 0:
     print("You don't have any borrowed books!")
     return
 
   print(f"\n{" Borrowed books ":-^71}")
   print(f" {"Title":^24} | {"Author":^24} | {"ISBN":^4} | {"Quantity":^8} ")
   print("-" * 71)
-  for book in current_login_user.borrowed_books:
+  for book in logged_in_user.borrowed_books:
     print(book)
   print("-" * 71)
 
@@ -270,14 +268,14 @@ def display_all_account():
   print(f"\n{" Registered Accounts ":-^71}")
   print(f"{"Name":^26}")
   print("-" * 26)
-  for acc in accounts_record:
+  for acc in registered_users:
     print(acc)
   print("-" * 26)
 
 
 # User account management
 def login():
-  global current_login_user
+  global logged_in_user
 
   print(f"\n{" Login ":-^71}")
   print("Leave empty and press Enter to return to the Main Menu.")
@@ -289,7 +287,7 @@ def login():
     password = input("Enter password: ")
 
     entry = None
-    for acc in accounts_record:
+    for acc in registered_users:
       if username == acc.name:
         entry = acc
 
@@ -297,7 +295,7 @@ def login():
       print(f"User '{username}' not found!")
     else:
       if password == entry.password:
-        current_login_user = entry
+        logged_in_user = entry
         if username == "admin":
           admin_dashboard()
         else:
@@ -315,7 +313,7 @@ def register():
     username = input("Enter username: ")
     if len(username) == 0: return
 
-    for acc in accounts_record:
+    for acc in registered_users:
       if username == acc.name:
         print("This username already exist!")
         return
@@ -323,7 +321,7 @@ def register():
     print("Empty password is allowed")
     password = input("Enter password: ")
 
-    accounts_record.append(Account(username, password))
+    registered_users.append(Account(username, password))
     print("Account has been Registered!")
     break
 
@@ -348,10 +346,10 @@ def main_menu():
 
 
 def user_dashboard():
-  global current_login_user
+  global logged_in_user
 
   while True:
-    print(f"\n{f" Login as {current_login_user.name} ":-^71}")
+    print(f"\n{f" Login as {logged_in_user.name} ":-^71}")
     print("[0] Search book")
     print("[1] Borrow book")
     print("[2] Return book")
@@ -371,7 +369,7 @@ def user_dashboard():
       case "4":
         display_all_books()
       case "5":
-        current_login_user = None
+        logged_in_user = None
         print("Logout...")
         return
       case _:
@@ -379,7 +377,7 @@ def user_dashboard():
 
 
 def admin_dashboard():
-  global current_login_user
+  global logged_in_user
 
   while True:
     print(f"\n{f" Admin Dashboard ":-^71}")
@@ -408,7 +406,7 @@ def admin_dashboard():
       case "6":
         display_all_borrowed_books()
       case "7":
-        current_login_user = None
+        logged_in_user = None
         print("Logout...")
         return
       case _:
@@ -416,7 +414,6 @@ def admin_dashboard():
 
 
 # main entry
-add_default_records()
 while True:
   main_menu()
 
