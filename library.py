@@ -51,13 +51,13 @@ def add_book():
     author = input("Enter author: ")
     if len(author) == 0: return
 
-    quantity = input("Enter quantity: ")
-    if len(quantity) == 0: return
-    if not quantity.isdigit():
-      print(f"'{quantity}' is not a valid number!")
+    input_quantity = input("Enter quantity: ")
+    if len(input_quantity) == 0: return
+    if not input_quantity.isdigit():
+      print(f"'{input_quantity}' is not a valid number!")
       continue
 
-    quantity = int(quantity)
+    quantity = int(input_quantity)
     if quantity <= 0:
       print(f"Quantity must be greater than 0!")
       continue
@@ -116,10 +116,13 @@ def remove_book():
         while True:
           input_quantity = input(f"Enter Quantity(1-{book.quantity}): ")
           if len(input_quantity) == 0: return
+          if not input_quantity.isdigit():
+            print(f"'{input_quantity}' is not a valid number!")
+            continue
 
           quantity = int(input_quantity)
           if quantity < 1 or quantity > book.quantity:
-            print(f"Please enter a number in between 1 and {book.quantity}")
+            print(f"Please enter a quantity in between 1 and {book.quantity}")
             continue
 
           book.quantity -= quantity
@@ -314,7 +317,7 @@ def register():
     for acc in accounts_record:
       if username == acc.name:
         print("This username already exist!")
-        continue
+        return
 
     print("Empty password is allowed")
     password = input("Enter password: ")
