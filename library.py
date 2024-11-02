@@ -53,6 +53,14 @@ def add_book():
 
     quantity = input("Enter quantity: ")
     if len(quantity) == 0: return
+    if not quantity.isdigit():
+      print(f"'{quantity}' is not a valid number!")
+      continue
+
+    quantity = int(quantity)
+    if quantity <= 0:
+      print(f"Quantity must be greater than 0!")
+      continue
 
     # find the isbn that was not in used
     isbn = 0
