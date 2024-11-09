@@ -5,7 +5,7 @@ class Account:
     self.name = name
     self.password = password
     self.borrowed_books = []
-  def __str__(self):
+  def as_str(self):
     return f"{self.name:^26}"
 
 
@@ -15,7 +15,7 @@ class Book:
     self.author = author
     self.isbn = isbn
     self.quantity = quantity
-  def __str__(self):
+  def as_str(self):
     return f" {self.title:^24} | {self.author:^24} | {self.isbn:^4} | {self.quantity:^8} "
 
 
@@ -79,7 +79,7 @@ def edit_book():
   print("Leave empty and press Enter to return to the Dashboard.")
 
   while True:
-    input_isbn = input("Enter ISBN: ")
+    input_isbn = input("\nEnter ISBN: ")
     if len(input_isbn) == 0: return
     if not input_isbn.isdigit():
       print(f"ISBN must contain only digits.")
@@ -88,7 +88,7 @@ def edit_book():
     isbn = int(input_isbn)
     for book in library_books:
       if isbn == book.isbn:
-        print("Leave empty to keep current info unchanged.")
+        print("\nLeave empty to keep current info unchanged.")
         title  = input("Enter title : ")
         author = input("Enter author: ")
 
@@ -97,13 +97,15 @@ def edit_book():
         print("Book info has been updated!")
         return
 
+    print(f"A book with '{isbn}' was not found")
+
 
 def remove_book():
   print(f"\n{" Removing a book ":-^71}")
   print("Leave empty and press Enter to return to the Dashboard.")
 
   while True:
-    input_isbn = input("Enter ISBN: ")
+    input_isbn = input("\nEnter ISBN: ")
     if len(input_isbn) == 0: return
     if not input_isbn.isdigit():
       print(f"ISBN must contain only digits.")
@@ -151,10 +153,10 @@ def search_book():
       if s.isdigit(): # it's either isbn or quantity
         n = int(s)
         if n == book.isbn or n == book.quantity:
-          print(book)
+          print(book.as_str())
           continue
       if s in book.title or s in book.author:
-        print(book)
+        print(book.as_str())
         continue
     print("-" * 71)
     break
@@ -165,7 +167,7 @@ def borrow_book():
   print("Leave empty and press Enter to return to the Dashboard.")
 
   while True:
-    input_isbn = input("Enter ISBN: ")
+    input_isbn = input("\nEnter ISBN: ")
     if len(input_isbn) == 0: return
     if not input_isbn.isdigit():
       print(f"ISBN must contain only digits.")
@@ -200,7 +202,7 @@ def return_book():
   print("Leave empty and press Enter to return to the Dashboard.")
 
   while True:
-    input_isbn = input("Enter ISBN: ")
+    input_isbn = input("\nEnter ISBN: ")
     if len(input_isbn) == 0: return
     if not input_isbn.isdigit():
       print(f"ISBN must contain only digits.")
@@ -236,7 +238,7 @@ def display_all_books():
   print(f" {"Title":^24} | {"Author":^24} | {"ISBN":^4} | {"Quantity":^8} ")
   print("-" * 71)
   for book in library_books:
-    print(book)
+    print(book.as_str())
   print("-" * 71)
 
 
@@ -246,7 +248,7 @@ def display_all_borrowed_books():
   print("-" * 85)
   for acc in registered_users:
     for book in acc.borrowed_books:
-      print(book, end=f"| {acc.name:^11}")
+      print(book.as_str(), end=f"| {acc.name:^11}")
       print()
   print("-" * 85)
 
@@ -260,7 +262,7 @@ def display_my_borrowed_books():
   print(f" {"Title":^24} | {"Author":^24} | {"ISBN":^4} | {"Quantity":^8} ")
   print("-" * 71)
   for book in logged_in_user.borrowed_books:
-    print(book)
+    print(book.as_str())
   print("-" * 71)
 
 
@@ -269,7 +271,7 @@ def display_all_account():
   print(f"{"Name":^26}")
   print("-" * 26)
   for acc in registered_users:
-    print(acc)
+    print(acc.as_str())
   print("-" * 26)
 
 
@@ -281,7 +283,7 @@ def login():
   print("Leave empty and press Enter to return to the Main Menu.")
 
   while True:
-    username = input("Enter username: ")
+    username = input("\nEnter username: ")
     if len(username) == 0: return
 
     password = input("Enter password: ")
@@ -310,7 +312,7 @@ def register():
   print("Leave empty and press Enter to return to the Main Menu.")
 
   while True:
-    username = input("Enter username: ")
+    username = input("\nEnter username: ")
     if len(username) == 0: return
 
     for acc in registered_users:
