@@ -331,16 +331,16 @@ def register():
 # Menus
 def main_menu():
   print(f"\n{" Main Menu ":-^71}")
-  print("[0] Login")
-  print("[1] Register")
-  print("[2] Exit")
+  print("1. Login")
+  print("2. Register")
+  print("3. Exit")
 
   match input("Input: "):
-    case "0":
-      login()
     case "1":
-      register()
+      login()
     case "2":
+      register()
+    case "3":
       print("Exiting...")
       exit()
     case _:
@@ -352,25 +352,25 @@ def user_dashboard():
 
   while True:
     print(f"\n{f" Login as {logged_in_user.name} ":-^71}")
-    print("[0] Search book")
-    print("[1] Borrow book")
-    print("[2] Return book")
-    print("[3] Display my borrowed books")
-    print("[4] Display all books")
-    print("[5] Logout")
+    print("1. Search book")
+    print("2. Borrow book")
+    print("3. Return book")
+    print("4. Display my borrowed books")
+    print("5. Display all books")
+    print("6. Logout")
 
     match input("Input: "):
-      case "0":
-        search_book()
       case "1":
-        borrow_book()
+        search_book()
       case "2":
-        return_book()
+        borrow_book()
       case "3":
-        display_my_borrowed_books()
+        return_book()
       case "4":
-        display_all_books()
+        display_my_borrowed_books()
       case "5":
+        display_all_books()
+      case "6":
         logged_in_user = None
         print("Logout...")
         return
@@ -383,31 +383,31 @@ def admin_dashboard():
 
   while True:
     print(f"\n{f" Admin Dashboard ":-^71}")
-    print("[0] Add book")
-    print("[1] Edit book")
-    print("[2] Remove book")
-    print("[3] Search book")
-    print("[4] Display all books")
-    print("[5] Display all account")
-    print("[6] Display all borrowed books")
-    print("[7] Logout")
+    print("1. Add book")
+    print("2. Edit book")
+    print("3. Remove book")
+    print("4. Search book")
+    print("5. Display all books")
+    print("6. Display all account")
+    print("7. Display all borrowed books")
+    print("8. Logout")
 
     match input("Input: "):
-      case "0":
-        add_book()
       case "1":
-        edit_book()
+        add_book()
       case "2":
-        remove_book()
+        edit_book()
       case "3":
-        search_book()
+        remove_book()
       case "4":
-        display_all_books()
+        search_book()
       case "5":
-        display_all_account()
+        display_all_books()
       case "6":
-        display_all_borrowed_books()
+        display_all_account()
       case "7":
+        display_all_borrowed_books()
+      case "8":
         logged_in_user = None
         print("Logout...")
         return
