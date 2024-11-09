@@ -1,14 +1,5 @@
 
 
-class Account:
-  def __init__(self, name, password):
-    self.name = name
-    self.password = password
-    self.borrowed_books = []
-  def as_str(self):
-    return f"{self.name:^26}"
-
-
 class Book:
   def __init__(self, title, author, isbn, quantity):
     self.title = title
@@ -17,6 +8,15 @@ class Book:
     self.quantity = quantity
   def as_str(self):
     return f" {self.title:^24} | {self.author:^24} | {self.isbn:^4} | {self.quantity:^8} "
+
+
+class Account:
+  def __init__(self, name, password):
+    self.name = name
+    self.password = password
+    self.borrowed_books = []
+  def as_str(self):
+    return f"{self.name:^26}"
 
 
 # Global Variables
