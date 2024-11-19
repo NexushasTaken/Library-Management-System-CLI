@@ -1,13 +1,20 @@
+import datetime
 
 
 class Book:
-  def __init__(self, title, author, isbn, quantity):
+  def __init__(self, title, author, isbn, quantity, due_date=None, borrowed_date=None):
     self.title = title
     self.author = author
     self.isbn = isbn
     self.quantity = quantity
+    self.due_date = due_date
+    self.borrowed_date = borrowed_date
   def as_str(self):
-    return f" {self.title:^24} | {self.author:^24} | {self.isbn:^4} | {self.quantity:^8} "
+    return f' {self.title:^24} | {self.author:^24} | {self.isbn:^4} | {self.quantity:^8} '
+  def as_str_borrowed(self):
+    return f' {self.title:^24} | {self.author:^24} | {self.isbn:^4} | {self.quantity:^8} | {self.due_date.strftime("%b %d, %Y"):^13} | {self.borrowed_date.strftime("%b %d, %Y"):^14} '
+  def is_overdue(self):
+    return datetime.datetime.now() > self.due_date
 
 
 class Account:
@@ -16,7 +23,7 @@ class Account:
     self.password = password
     self.borrowed_books = []
   def as_str(self):
-    return f"{self.name:^26}"
+    return f'{self.name:^26}'
 
 
 # Global Variables
@@ -39,7 +46,7 @@ logged_in_user = None
 
 # Book operations
 def add_book():
-  print(f"\n{" Adding a new book ":-^71}")
+  print(f'\n{" Adding a new book ":-^71}')
   print("Leave empty and press Enter to return to the Dashboard.")
 
   while True:
@@ -52,12 +59,12 @@ def add_book():
     input_quantity = input("Enter quantity: ")
     if len(input_quantity) == 0: return
     if not input_quantity.isdigit():
-      print(f"'{input_quantity}' is not a valid number!")
+      print(f'"{input_quantity}" is not a valid number!')
       continue
 
     quantity = int(input_quantity)
     if quantity <= 0:
-      print(f"Quantity must be greater than 0!")
+      print(f'Quantity must be greater than 0!')
       continue
 
     # find the isbn that was not in used
@@ -75,14 +82,14 @@ def add_book():
 
 
 def edit_book():
-  print(f"\n{" Editing the book title and author ":-^71}")
+  print(f'\n{" Editing the book title and author ":-^71}')
   print("Leave empty and press Enter to return to the Dashboard.")
 
   while True:
     input_isbn = input("\nEnter ISBN: ")
     if len(input_isbn) == 0: return
     if not input_isbn.isdigit():
-      print(f"ISBN must contain only digits.")
+      print(f'ISBN must contain only digits.')
       continue
 
     isbn = int(input_isbn)
@@ -97,47 +104,47 @@ def edit_book():
         print("Book info has been updated!")
         return
 
-    print(f"A book with '{isbn}' was not found")
+    print(f'A book with "{isbn}" was not found')
 
 
 def remove_book():
-  print(f"\n{" Removing a book ":-^71}")
+  print(f'\n{" Removing a book ":-^71}')
   print("Leave empty and press Enter to return to the Dashboard.")
 
   while True:
     input_isbn = input("\nEnter ISBN: ")
     if len(input_isbn) == 0: return
     if not input_isbn.isdigit():
-      print(f"ISBN must contain only digits.")
+      print(f'ISBN must contain only digits.')
       continue
 
     isbn = int(input_isbn)
     for book in library_books:
       if isbn == book.isbn:
         while True:
-          input_quantity = input(f"Enter Quantity(1-{book.quantity}): ")
+          input_quantity = input(f'Enter Quantity(1-{book.quantity}): ')
           if len(input_quantity) == 0: return
           if not input_quantity.isdigit():
-            print(f"'{input_quantity}' is not a valid number!")
+            print(f'"{input_quantity}" is not a valid number!')
             continue
 
           quantity = int(input_quantity)
           if quantity < 1 or quantity > book.quantity:
-            print(f"Please enter a quantity in between 1 and {book.quantity}")
+            print(f'Please enter a quantity in between 1 and {book.quantity}')
             continue
 
           book.quantity -= quantity
           if book.quantity == 0:
             library_books.remove(book)
 
-          print(f"{quantity} books has been removed!")
+          print(f'{quantity} books has been removed!')
           return
 
-    print(f"A book with '{isbn}' was not found")
+    print(f'A book with "{isbn}" was not found')
 
 
 def search_book():
-  print(f"\n{" Book searching ":-^71}")
+  print(f'\n{" Book searching ":-^71}')
   print("Leave empty and press Enter to return to the Dashboard.")
 
   while True:
@@ -146,8 +153,8 @@ def search_book():
     s = input("Search term: ")
     if len(s) == 0: return
 
-    print(f"{"Search results":-^71}")
-    print(f" {"Title":^24} | {"Author":^24} | {"ISBN":^4} | {"Quantity":^8} ")
+    print(f'{"Search results":-^71}')
+    print(f' {"Title":^24} | {"Author":^24} | {"ISBN":^4} | {"Quantity":^8} ')
     print("-" * 71)
     for book in library_books:
       if s.isdigit(): # it's either isbn or quantity
@@ -163,14 +170,14 @@ def search_book():
 
 
 def borrow_book():
-  print(f"\n{" Borrowing a book ":-^71}")
+  print(f'\n{" Borrowing a book ":-^71}')
   print("Leave empty and press Enter to return to the Dashboard.")
 
   while True:
     input_isbn = input("\nEnter ISBN: ")
     if len(input_isbn) == 0: return
     if not input_isbn.isdigit():
-      print(f"ISBN must contain only digits.")
+      print(f'ISBN must contain only digits.')
       continue
 
     isbn = int(input_isbn)
@@ -187,10 +194,29 @@ def borrow_book():
         if book.quantity == 0:
           library_books.remove(book)
 
-        logged_in_user.borrowed_books.append(Book(book.title, book.author, book.isbn, 1))
+        now = datetime.datetime.now()
+        due_date = now - datetime.timedelta(weeks=1)
+
+        logged_in_user.borrowed_books.append(Book(book.title, book.author, book.isbn, 1, due_date, now))
         print("Sucessfully borrowed")
         return
-    print(f"A book with '{isbn}' was not found")
+    print(f'A book with "{isbn}" was not found')
+
+
+def return_book_by_isbn(isbn):
+  for borrowed_book in logged_in_user.borrowed_books:
+    for record in library_books:
+      if isbn == record.isbn:
+        entry = record
+    
+    if entry == None:
+      library_books.append(Book(borrowed_book.title, borrowed_book.author, borrowed_book.isbn, 1))
+    else:
+      entry.quantity += 1
+    
+    # Assuming each book's quantity is set to one, since a user can only
+    # borrow the same book once.
+    logged_in_user.borrowed_books.remove(borrowed_book)
 
 
 def return_book():
@@ -198,14 +224,14 @@ def return_book():
     print("You don't have any borrowed books!")
     return
 
-  print(f"\n{" Returning a book ":-^71}")
+  print(f'\n{" Returning a book ":-^71}')
   print("Leave empty and press Enter to return to the Dashboard.")
 
   while True:
     input_isbn = input("\nEnter ISBN: ")
     if len(input_isbn) == 0: return
     if not input_isbn.isdigit():
-      print(f"ISBN must contain only digits.")
+      print(f'ISBN must contain only digits.')
       continue
 
     isbn = int(input_isbn)
@@ -213,29 +239,23 @@ def return_book():
     for borrowed_book in logged_in_user.borrowed_books:
       if isbn == borrowed_book.isbn:
         entry = None
-
-        for record in library_books:
-          if isbn == record.isbn:
-            entry = record
-
-        if entry == None:
-          library_books.append(Book(borrowed_book.title, borrowed_book.author, borrowed_book.isbn, 1))
-        else:
-          entry.quantity += 1
-
-        # Assuming each book's quantity is set to one, since a user can only
-        # borrow the same book once.
-        logged_in_user.borrowed_books.remove(borrowed_book)
-
+        return_book_by_isbn(isbn)
         print("Sucessfully returned")
         return
-    print(f"A book with '{isbn}' was not found")
+    print(f'A book with "{isbn}" was not found')
+
+
+def validate_books_due_date():
+  for book in logged_in_user.borrowed_books:
+    if book.is_overdue():
+      return_book_by_isbn(book.isbn)
+      print(f"The book '{book.title}' has passed the due date, returning automatically.")
 
 
 # Display operations
 def display_all_books():
-  print(f"\n{" Available books ":-^71}")
-  print(f" {"Title":^24} | {"Author":^24} | {"ISBN":^4} | {"Quantity":^8} ")
+  print(f'\n{" Available books ":-^71}')
+  print(f' {"Title":^24} | {"Author":^24} | {"ISBN":^4} | {"Quantity":^8} ')
   print("-" * 71)
   for book in library_books:
     print(book.as_str())
@@ -243,12 +263,12 @@ def display_all_books():
 
 
 def display_all_borrowed_books():
-  print(f"\n{" Borrowed Books by users ":-^85}")
-  print(f" {"Title":^24} | {"Author":^24} | {"ISBN":^4} | {"Quantity":^8} | {"Borrowed by":^11} ")
+  print(f'\n{" Borrowed Books by users ":-^85}')
+  print(f' {"Title":^24} | {"Author":^24} | {"ISBN":^4} | {"Quantity":^8} | {"Date borrowed":^15} | {"Due date":10} | {"Borrowed by":^11}')
   print("-" * 85)
   for acc in registered_users:
     for book in acc.borrowed_books:
-      print(book.as_str(), end=f"| {acc.name:^11}")
+      print(book.as_str_borrowed(), end=f"| {acc.name:^11}")
       print()
   print("-" * 85)
 
@@ -258,17 +278,17 @@ def display_my_borrowed_books():
     print("You don't have any borrowed books!")
     return
 
-  print(f"\n{" Borrowed books ":-^71}")
-  print(f" {"Title":^24} | {"Author":^24} | {"ISBN":^4} | {"Quantity":^8} ")
-  print("-" * 71)
+  print(f"\n{' Borrowed books ':-^103}")
+  print(f' {"Title":^24} | {"Author":^24} | {"ISBN":^4} | {"Quantity":^8} | {"Date borrowed":^13} | {"Due date":10}')
+  print("-" * 103)
   for book in logged_in_user.borrowed_books:
-    print(book.as_str())
-  print("-" * 71)
+    print(book.as_str_borrowed())
+  print("-" * 103)
 
 
 def display_all_account():
-  print(f"\n{" Registered Accounts ":-^71}")
-  print(f"{"Name":^26}")
+  print(f'\n{" Registered Accounts ":-^71}')
+  print(f'{"Name":^26}')
   print("-" * 26)
   for acc in registered_users:
     print(acc.as_str())
@@ -279,7 +299,7 @@ def display_all_account():
 def login():
   global logged_in_user
 
-  print(f"\n{" Login ":-^71}")
+  print(f'\n{" Login ":-^71}')
   print("Leave empty and press Enter to return to the Main Menu.")
 
   while True:
@@ -294,7 +314,7 @@ def login():
         entry = acc
 
     if entry == None:
-      print(f"User '{username}' not found!")
+      print(f'User "{username}" not found!')
     else:
       if password == entry.password:
         logged_in_user = entry
@@ -308,7 +328,7 @@ def login():
 
 
 def register():
-  print(f"\n{" Register ":-^71}")
+  print(f'\n{" Register ":-^71}')
   print("Leave empty and press Enter to return to the Main Menu.")
 
   while True:
@@ -330,7 +350,7 @@ def register():
 
 # Menus
 def main_menu():
-  print(f"\n{" Main Menu ":-^71}")
+  print(f'\n{" Main Menu ":-^71}')
   print("1. Login")
   print("2. Register")
   print("3. Exit")
@@ -351,7 +371,8 @@ def user_dashboard():
   global logged_in_user
 
   while True:
-    print(f"\n{f" Login as {logged_in_user.name} ":-^71}")
+    print(f'\n{f" Login as {logged_in_user.name} ":-^71}')
+    validate_books_due_date()
     print("1. Search book")
     print("2. Borrow book")
     print("3. Return book")
@@ -382,7 +403,7 @@ def admin_dashboard():
   global logged_in_user
 
   while True:
-    print(f"\n{f" Admin Dashboard ":-^71}")
+    print(f'\n{f" Admin Dashboard ":-^71}')
     print("1. Add book")
     print("2. Edit book")
     print("3. Remove book")
@@ -418,4 +439,3 @@ def admin_dashboard():
 # Main entry
 while True:
   main_menu()
-
