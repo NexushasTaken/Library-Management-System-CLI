@@ -195,7 +195,7 @@ def borrow_book():
           library_books.remove(book)
 
         now = datetime.datetime.now()
-        due_date = now - datetime.timedelta(weeks=1)
+        due_date = now + datetime.timedelta(weeks=1)
 
         logged_in_user.borrowed_books.append(Book(book.title, book.author, book.isbn, 1, due_date, now))
         print("Sucessfully borrowed")
